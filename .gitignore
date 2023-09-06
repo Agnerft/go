@@ -1,0 +1,38 @@
+# Binaries
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Dependency directories (remove these if you manage dependencies outside of your repository)
+/vendor/
+/go.sum
+/go.mod
+
+# Compiled Object files, Static and Dynamic Libraries
+*.o
+*.a
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Go binary
+bin/
+pkg/
+
+# Go test cache
+.cache/
+
+# Project-specific output directories
+/dist/
+/build/
+
+# Logs
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# VS Code settings (remove if you don't use VS Code)
+.vscode/

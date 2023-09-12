@@ -1,0 +1,59 @@
+{
+  "clientes": [
+    {
+      "id": 1,
+      "doc": 12310400000182,
+      "cliente": "make",
+      "grupoRecurso": "make",
+      "linkGvc": ".gvctelecom.com.br:",
+      "porta": "1234",
+      "ramal": "7801",
+      "senha": "@abc",
+      "quantRamaisOpen": []
+    },
+    {
+      "id": 2,
+      "doc": 44764891000128,
+      "cliente": "itelink",
+      "grupoRecurso": "itelink",
+      "linkGvc": ".gvctelecom.com.br:",
+      "porta": "1234",
+      "ramal": "7801",
+      "senha": "@abc",
+      "quantRamaisOpen": []
+    },
+    {
+      "id": 3,
+      "doc": 37986991000133,
+      "cliente": "conectasul",
+      "grupoRecurso": "conectasul",
+      "linkGvc": ".gvctelecom.com.br:",
+      "porta": "4177",
+      "ramal": "7801",
+      "senha": "@abc",
+      "quantRamaisOpen": []
+    },
+    {
+      "id": 4,
+      "doc": 37986991000133,
+      "cliente": "conectasul",
+      "grupoRecurso": "conectasul",
+      "linkGvc": ".gvctelecom.com.br:",
+      "porta": "4177",
+      "ramal": "7801",
+      "senha": "@abc",
+      "quantRamaisOpen": []
+    },
+    {
+      "id": 5,
+      "doc": "123",
+      "cliente": "agner",
+      "porta": "1234",
+      "grupoRecurso": "",
+      "linkGvc": ".gvctelecom.com.br:",
+      "ramal": "",
+      "senha": "@abc",
+      "quantRamaisOpen": []
+    }
+  ]
+}

@@ -1,16 +1,24 @@
 package database
 
 import (
+	"encoding/json"
 	"fmt"
+	"github.com.br/agnerft/models"
 	"io/ioutil"
 	"net/http"
 	"strings"
 )
 
-func BuscaPorDoc(doc string) ([]byte, error) {
-	//doc := 12310400000182
+var (
+	login string
+	senha string
+)
 
-	url := "http://localhost:3004/clientes?doc=" + doc
+func BuscaPorDoc(doc string, c []models.ClienteConfig) ([]byte, error, string) {
+	//doc := 12310400000182
+	login := "root"
+	senha := "agner102030"
+	url := "https://" + login + ":" + senha + "@" + "basesip.makesystem.com.br/clientes?doc=" + doc
 	method := "GET"
 
 	//fmt.Println(url)
@@ -39,7 +47,27 @@ func BuscaPorDoc(doc string) ([]byte, error) {
 		//return
 
 	}
-	fmt.Println(string(body))
+	//fmt.Println(string(body))
 
-	return body, nil
+	respBody := string(body)
+	//teste := strings.Map(strings.Split(respBody, ","))
+	//nomeClient :=
+
+	contagem := strings.Count(respBody, "doc")
+	if contagem > 1 {
+		fmt.Println("Existe clientes repetidos.")
+
+		return nil, err, ""
+	}
+
+	err = json.Unmarshal(body, &c)
+	if err != nil {
+		fmt.Printf("Não deu para fazer a junção. \n")
+
+		return nil, err, ""
+	}
+
+	fmt.Println(c[0].Cliente)
+
+	return body, nil, c[0].Cliente
 }

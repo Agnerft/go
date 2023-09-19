@@ -11,7 +11,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strconv"
+	"time"
 )
 
 var clientConfig []models.ClienteConfig
@@ -62,21 +62,19 @@ func main() {
 	}
 	fmt.Println("Processo encerrado com sucesso.")
 
-	fmt.Println("Executou ?")
-
+	fmt.Println("Agora vamos verificar se vc está na nossa base de dados, um momento")
+	time.Sleep(1)
 	// Salvando o arquivo ini na pasta \\AppData\\Roamming
 	resultadoIni := salvarArquivo(link, desktopPath+"\\AppData\\Roaming\\", nomeInstalador, ".ini")
 
 	// Editando o arquivo
 
-	jsonfile, _ := database.BuscaPorDoc(doc)
-
+	jsonfile, _, nomeCliente := database.BuscaPorDoc(doc, clientConfig)
+	fmt.Println("Encontrei, " + nomeCliente)
 	if err := json.Unmarshal(jsonfile, &clientConfig); err != nil {
 		fmt.Println("Erro ao fazer o Unmarshal do JSON:", err)
 		return
 	}
-
-	//fmt.Println("Executou ?")
 
 	// Edição e Salvamento do arquivo .ini
 	for _, config := range clientConfig {
@@ -87,11 +85,7 @@ func main() {
 			fmt.Println("Erro ao ler a entrada:", err)
 			return
 		}
-		ramalString, _ := strconv.Atoi(ramal)
 
-		teste := utils.BuscaRamal(ramalString, config)
-
-		fmt.Println(teste)
 		config.Ramal = ramal
 		//
 		//
@@ -129,42 +123,6 @@ func downloadFile(url string, destPath string) error {
 
 	return nil
 }
-
-/*func unzip(src string, dest string) error {
-	r, err := zip.OpenReader(src)
-	if err != nil {
-		return err
-	}
-	defer r.Close()
-
-	for _, f := range r.File {
-		rc, err := f.Open()
-		if err != nil {
-			return err
-		}
-		defer rc.Close()
-
-		filePath := filepath.Join(dest, f.Name)
-		if f.FileInfo().IsDir() {
-			os.MkdirAll(filePath, f.Mode())
-		} else {
-			outFile, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
-			if err != nil {
-				return err
-			}
-			defer outFile.Close()
-
-			_, err = io.Copy(outFile, rc)
-			if err != nil {
-				return err
-			}
-		}
-	}
-
-	return nil
-}
-
-*/
 
 func salvarArquivo(link string, destination string, namePath string, extenssao string) string {
 

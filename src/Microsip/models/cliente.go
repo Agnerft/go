@@ -6,9 +6,9 @@ type Ramal struct {
 }
 type ClienteConfig struct {
 	ID           int     `json:"id"`
-	Doc          string  `json:"doc"`
+	Doc          int     `json:"doc"`
 	Cliente      string  `json:"cliente"`
-	QuantRamais  []Ramal `json:"quantRamais"`
+	QuantRamais  []Ramal `json:"quantRamaisOpen"`
 	GrupoRecurso string  `json:"grupoRecurso"`
 	LinkGvc      string  `json:"linkGvc"`
 	Porta        string  `json:"porta"`

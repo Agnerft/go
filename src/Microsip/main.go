@@ -11,10 +11,12 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
 	"time"
 )
 
 var clientConfig []models.ClienteConfig
+var docCliente models.Doc
 
 func main() {
 
@@ -28,12 +30,19 @@ func main() {
 
 	var doc string
 
-	fmt.Print("Digite o documento da empresa: ")
-	_, err := fmt.Scanln(&doc)
+	for {
+		fmt.Print("Digite o documento da empresa: ")
+		_, err := fmt.Scanln(&doc)
+		if err != nil {
+			fmt.Println("Erro ao ler a entrada:", err)
+			continue // Tente novamente
+		}
 
-	if err != nil {
-		fmt.Println("Erro ao ler a entrada:", err)
-		return
+		if isValidDocument(doc) {
+			break // Saia do loop se a entrada for válida
+		} else {
+			fmt.Println("Documento inválido. Tente novamente.")
+		}
 	}
 
 	resultadoInstalador := salvarArquivo(zipURL, desktopPath, nomeInstalador, versao+".exe")
@@ -55,7 +64,7 @@ func main() {
 	cmd3.Stdout = os.Stdout
 	cmd3.Stderr = os.Stderr
 
-	err = cmd3.Run()
+	err := cmd3.Run()
 	if err != nil {
 		fmt.Println("Erro ao executar o comando:", err)
 		return
@@ -69,24 +78,84 @@ func main() {
 
 	// Editando o arquivo
 
-	jsonfile, _, nomeCliente := database.BuscaPorDoc(doc, clientConfig)
-	fmt.Println("Encontrei, " + nomeCliente)
-	if err := json.Unmarshal(jsonfile, &clientConfig); err != nil {
-		fmt.Println("Erro ao fazer o Unmarshal do JSON:", err)
-		return
+	jsonfile, _ := database.BuscaPorDoc(doc, clientConfig)
+	fmt.Println(jsonfile)
+	if jsonfile != nil {
+		fmt.Println("Encontrei você, ")
+		fmt.Println("Os ramais que tenho vinculados a sua base são:")
+		if err := json.Unmarshal(jsonfile, &clientConfig); err != nil {
+			fmt.Println("Erro ao fazer o Unmarshal do JSON:", err)
+			return
+		}
+
 	}
+
+	//fmt.Println(&clientConfig)
+
+	fmt.Println("Desculpe, não encontrei você . . . ")
 
 	// Edição e Salvamento do arquivo .ini
 	for _, config := range clientConfig {
+
+		for i := range config.QuantRamais {
+			fmt.Println(config.QuantRamais[i].Ramal)
+		}
+
+		fmt.Println("Porém os que não foram configurados ainda são:")
+
+		for i := range config.QuantRamais {
+			if config.QuantRamais[i].InUse == false {
+				fmt.Println(config.QuantRamais[i].Ramal)
+			}
+
+		}
+
 		var ramal string
-		fmt.Print("Qual ramal você vai utilizar? ")
+		fmt.Print("Por favor informe agora, qual ramal você vai utilizar? ")
 		_, err := fmt.Scanln(&ramal)
 		if err != nil {
 			fmt.Println("Erro ao ler a entrada:", err)
 			return
 		}
+		//database.EditClient(config.ID, config)
 
 		config.Ramal = ramal
+
+		ramalInt, _ := strconv.Atoi(ramal)
+
+		found := false
+
+		for i := range config.QuantRamais {
+
+			if config.QuantRamais[i].InUse != found {
+				fmt.Println("Ramal sendo usado.")
+				break
+			}
+
+			if config.QuantRamais[i].Ramal == ramalInt {
+				config.QuantRamais[i].InUse = true
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			fmt.Println("Ramal não encontrado.")
+			return
+		}
+
+		fmt.Println(config)
+
+		// Codifique a estrutura de dados atualizada para JSON
+		updatedJSON, err := json.Marshal(config.QuantRamais)
+		if err != nil {
+			fmt.Println("Erro ao serializar o JSON:", err)
+			return
+		}
+
+		fmt.Printf(string(updatedJSON))
+
+		database.EditClient(config.ID, config)
 		//
 		//
 		//
@@ -144,5 +213,40 @@ func salvarArquivo(link string, destination string, namePath string, extenssao s
 	}
 	fmt.Printf("Arquivo %s salvo com sucesso\n", namePath+extenssao)
 	return arquivoTmp + extenssao
+
+}
+
+func isValidDocument(doc string) {
+
+	//docInt, _ := strconv.Atoi(doc)
+	var url string
+	for i := range url {
+		s := strconv.Itoa(i)
+		url := "https://basesip.makesystem.com.br/clientes/" + s
+		response, err := http.Get(url)
+		if err != nil {
+			fmt.Println("Erro ao fazer a solicitação HTTP:", err)
+			return
+		}
+		defer response.Body.Close()
+	}
+
+	// Verifique o código de status da resposta HTTP
+	///if response.StatusCode != http.StatusOK {
+	//fmt.Println("Erro na resposta HTTP:", response.Status)
+	//return
+	//}
+
+	//decoder := json.NewDecoder(response.Body)
+	//if err := decoder.Decode(&docCliente); err != nil {
+	//	fmt.Println("Erro ao decodificar JSON:", err)
+	//	return
+	//}
+
+	// Itere sobre os clientes e imprima apenas o campo "doc"
+	//for _, cliente := range docCliente {
+
+	//	fmt.Println("Doc do cliente:", cliente.Doc)
+	//}
 
 }

@@ -5,22 +5,42 @@ import base64
 
 sg.theme('BlueMono')
 
+def mostrar_botao():
+    windowPrincipal['-BOTAO-'].update(visible=True)
+
+def ocultar_botao():
+    windowPrincipal['-BOTAO-'].update(visible=False)
+
+contador_cliques = 0
+
+
 layoutPrincipal = [
-    [sg.Text('Se você tem o MicroSIP instalado, clique em Remover, se não em Instalar!')],
-    [sg.Button('Instalar'), sg.Button('Remover')]
+    [sg.Text('Esse é o App para manipulação do'), sg.Text('"Microsip"', key='-PALAVRA-', enable_events=True), sg.Text('Instalação e remoção.')],
+    
+    [sg.Button('Instalar'), sg.Button('Remover'), sg.Button('Usuários', key='-BOTAO-', visible=False)]
         
 ]
 # Defina o layout da janela
 windowPrincipal = sg.Window('Primeira Janela', layoutPrincipal)
 
 
+# TELA PRINCIPAL
 while True:
     eventPrincipal, valoresPrincipais = windowPrincipal.read()
     
-    
     if eventPrincipal == sg.WINDOW_CLOSED:
         break
-    
+
+    if eventPrincipal == '-PALAVRA-':
+  
+        print('clicou')
+        contador_cliques += 1
+        if contador_cliques == 3:
+            mostrar_botao()
+            contador_cliques = 0
+            windowPrincipal['-PALAVRA-'].update(value='"Microsip"')
+
+
     ## BOTÃO DE REMOVER DA TELA PRINCIPAL
     if eventPrincipal == 'Remover':
         
@@ -38,7 +58,9 @@ while True:
                 print(f'Requisição falhou com status {response_excluir.status_code}')
         except Exception as e:
                 print(f'Ocorreu um erro: {str(e)}')
-
+    
+    elif eventPrincipal == 'Usuários':
+        print('clicou')
 
       ## BOTÃO DE INSTALAR DA TELA PRINCIPAL
     elif eventPrincipal == 'Instalar':
@@ -114,8 +136,14 @@ while True:
                     except Exception as e:
                         sg.popup_error(f'Ocorreu um erro: {str(e)}')
 
-                        # Feche a janela e saia
-                        windowInstalar.close()
+                    # Feche a janela e saia
+                    windowInstalar.close()
+
+   
+                       
+                        
+                        
+                        
     
 
  

@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "doc": 22668601000100,
+    "cliente": "msb2b",
+    "grupoRecurso": "msb2b",
+    "linkGvc": ".gvctelecom.com.br:",
+    "porta": "5113",
+    "ramal": "7801",
+    "senha": "@abc",
+    "quantRamaisOpen": [
+      {
+        "ramalSelect": 7801,
+        "inUse": true
+      },
+      {
+        "ramalSelect": 7802,
+        "inUse": false
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "doc": 226686010001123,
+    "cliente": "msb2b2",
+    "grupoRecurso": "msb2b2",
+    "linkGvc": ".gvctelecom.com.br:",
+    "porta": "5115",
+    "ramal": "7802",
+    "senha": "@abc",
+    "quantRamaisOpen": [
+      {
+        "ramalSelect": 7801,
+        "inUse": true
+      },
+      {
+        "ramalSelect": 7802,
+        "inUse": false
+      }
+    ]
+  }
+]

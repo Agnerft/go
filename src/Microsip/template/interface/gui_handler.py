@@ -43,3 +43,18 @@ def download_and_execute():
             print("Erro ao fazer o download do arquivo")
     except Exception as e:
         print(f"Erro durante o download: {e}")
+        
+
+def create_user():
+    layoutUser = [
+        [sg.Text('Documento'), sg.InputText(size=(20, 1), key='documento')],
+        [sg.Text('Cliente'), sg.InputText(size=(20, 1), key='cliente')],
+        [sg.Text('Grupo de Recursos'), sg.InputText(size=(20, 1), key='grupoRecurso')],
+        [sg.Text('link GVC'), sg.InputText(size=(20,1), key='link')],
+        [sg.Text('Porta'), sg.InputText(size=(20,1), key='porta')],
+        [sg.Text('Quantos ramais'), sg.InputText(size=(10,1), key='quantRamaisOpen')],
+        [sg.Button('Salvar')]   
+    ]
+    
+    windowCreateUser = sg.Window('Criação do Usuário', layoutUser, finalize=True)
+    return windowCreateUser
